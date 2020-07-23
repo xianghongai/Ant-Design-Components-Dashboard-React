@@ -4,11 +4,11 @@
 
 ## 安装/Install
 
-- [Tampermonkey](https://www.tampermonkey.net/)
-- [Greasy Fork: Ant Design Components Dashboard (React) (^4.0.0)](https://greasyfork.org/zh-CN/scripts/402379-ant-design-components-dashboard-react-4-0-0)
-- [Greasy Fork: Ant Design Components Dashboard (React) (^3.0.0)](https://greasyfork.org/zh-CN/scripts/394791-ant-design-components-dashboard-react-3-0-0)
+- 浏览器安装扩展 [Tampermonkey](https://www.tampermonkey.net/)
+- 扩展中安装脚本 [Greasy Fork: Ant Design Components Dashboard (React) (4.x)](https://greasyfork.org/zh-CN/scripts/402379-ant-design-components-dashboard-react-4-0-0)
+- 扩展中安装脚本 [Greasy Fork: Ant Design Components Dashboard (React) (3.x)](https://greasyfork.org/zh-CN/scripts/394791-ant-design-components-dashboard-react-3-0-0)
 
-
+之后访问 [Ant Design](https://ant.design/components/overview-cn/) 官网体验。
 
 ## Screenshots
 
