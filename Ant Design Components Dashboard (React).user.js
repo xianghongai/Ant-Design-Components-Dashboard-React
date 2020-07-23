@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name:zh-CN   Ant Design 组件菜单 (^4.0.0)
+// @name:zh-CN   Ant Design 组件看板 (^4.0.0)
 // @name         Ant Design Components Dashboard (React) (^4.0.0)
 // @namespace    https://github.com/xianghongai/Ant-Design-Components-Dashboard-React
 // @version      0.0.1
