@@ -2,7 +2,7 @@
 // @name:zh-CN   Ant Design 组件菜单 (^4.0.0)
 // @name         Ant Design Components Dashboard (React) (^4.0.0)
 // @namespace    https://github.com/xianghongai/Ant-Design-Components-Dashboard-React
-// @version      0.0.4
+// @version      0.0.1
 // @description:zh-CN  更方便的查看 Ant Design (React) 组件
 // @description  Better view for Ant Design (React)
 // @author       Nicholas Hsiang / 山茶树和葡萄树
