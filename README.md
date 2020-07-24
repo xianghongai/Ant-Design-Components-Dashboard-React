@@ -12,12 +12,14 @@
 
 ## Screenshots
 
-![](https://raw.githubusercontent.com/caringrun/assets/master/ant-design-components-dashboard-react.png)
+![无法访问 raw.githubusercontent.com](https://raw.githubusercontent.com/caringrun/assets/master/ant-design-components-dashboard-react.png)
 
-![](https://raw.githubusercontent.com/caringrun/assets/master/ant-design-components-dashboard-react-2.png)
+![无法访问 raw.githubusercontent.com](https://raw.githubusercontent.com/caringrun/assets/master/ant-design-components-dashboard-react-2.png)
+
+预览回滚: [toggle](https://i.loli.net/2020/07/24/jVB42KrdYwzNvCi.png), [dashboard](https://i.loli.net/2020/07/24/IPanWxK3LCk7u9q.png)
 
 ---
 
-**Donate**
+**[Donate](https://i.loli.net/2020/07/24/fO2yerxqXFuZV5L.png)**
 
 ![](https://raw.githubusercontent.com/caringrun/assets/master/donate.png)
