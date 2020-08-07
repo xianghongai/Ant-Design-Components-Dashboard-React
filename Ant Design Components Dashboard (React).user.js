@@ -2,7 +2,7 @@
 // @name:zh-CN   Ant Design 组件看板 (^4.0.0)
 // @name         Ant Design Components Dashboard (React) (^4.0.0)
 // @namespace    https://github.com/xianghongai/Ant-Design-Components-Dashboard-React
-// @version      0.0.1
+// @version      0.0.2
 // @description:zh-CN  更方便的查看 Ant Design (React) 组件
 // @description  Better view for Ant Design (React)
 // @author       Nicholas Hsiang / 山茶树和葡萄树
@@ -24,16 +24,7 @@
   const helpEnable = true;
   const helpSelector = ".api-container";
   const removeSelector = gridSelector + ">li:not(.ant-menu-item-group)";
-
-  function initialDashboard() {
-    initialToggle();
-    initialStyle();
-    initialMenu();
-    initialHelp();
-    handleEvent();
-
-    resetLayout();
-  }
+  let completed = false;
 
   let interval = null;
 
@@ -42,13 +33,72 @@
 
     if (originEle) {
       clearInterval(interval);
-      // Dashboard
-      initialDashboard();
+      init();
       // Other
     }
   }
 
   interval = setInterval(ready, 1000);
+
+  // 进入站点时看是否匹配
+  function init(href = window.location.href) {
+    if (href.includes("components")) {
+      if (completed === false) {
+        completed = true;
+
+        // Dashboard
+        initialDashboard();
+      }
+      bodyContainer.classList.add("hs-page__component");
+      // resetLayout("in");
+    } else {
+      bodyContainer.classList.remove("hs-page__component");
+      // resetLayout("off");
+    }
+  }
+
+  // 通过点击进入其它页面，或进入指定页面
+  function handleMenuSiteEvent(event) {
+    const eventTarget = event.target;
+    const tagName = eventTarget.tagName.toLowerCase();
+    let href = "";
+
+    if (tagName === "a") {
+      href = eventTarget.href;
+      init(href);
+    }
+  }
+
+  function menuSiteEvent() {
+    var menuSite = document.querySelector("#nav");
+    menuSite.addEventListener("click", handleMenuSiteEvent);
+  }
+
+  function resetLayout(type) {
+    const pageSider = document.querySelector(".main-wrapper>.ant-row>.main-menu");
+    const pageContainer = document.querySelector(".main-wrapper>.ant-row>.ant-col+.ant-col");
+
+    switch (type) {
+      case "in":
+        pageSider.classList.add("hs-hide");
+        pageContainer.classList.remove("ant-col-md-18", "ant-col-lg-18", "ant-col-xl-19", "ant-col-xxl-20");
+        pageContainer.classList.add("ant-col-md-24", "ant-col-lg-24", "ant-col-xl-24", "ant-col-xxl-24");
+        break;
+      default:
+        pageSider.classList.remove("hs-hide");
+        pageContainer.classList.remove("ant-col-md-24", "ant-col-lg-24", "ant-col-xl-24", "ant-col-xxl-24");
+        pageContainer.classList.add("ant-col-md-18", "ant-col-lg-18", "ant-col-xl-19", "ant-col-xxl-20");
+        break;
+    }
+  }
+
+  function initialDashboard() {
+    initialToggle();
+    initialStyle();
+    initialMenu();
+    initialHelp();
+    handleEvent();
+  }
 
   // #region MENU
   /** 生成 Menu */
@@ -438,13 +488,4 @@
     return null;
   }
   // #endregion
-
-  function resetLayout() {
-    const pageSider = document.querySelector(".main-wrapper>.ant-row>.main-menu");
-    const pageContainer = document.querySelector(".main-wrapper>.ant-row>.ant-col+.ant-col");
-
-    pageSider.classList.add("hs-hide");
-    pageContainer.classList.remove("ant-col-md-18", "ant-col-lg-18", "ant-col-xl-19", "ant-col-xxl-20");
-    pageContainer.classList.add("ant-col-md-24", "ant-col-lg-24", "ant-col-xl-24", "ant-col-xxl-24");
-  }
 })();
