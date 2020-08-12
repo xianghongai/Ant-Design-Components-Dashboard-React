@@ -2,23 +2,29 @@
 // @name:zh-CN   Ant Design 组件看板 (^4.0.0)
 // @name         Ant Design Components Dashboard (React) (^4.0.0)
 // @namespace    https://github.com/xianghongai/Ant-Design-Components-Dashboard-React
-// @version      0.0.2
+// @version      0.0.4
 // @description:zh-CN  更方便的查看 Ant Design (React) 组件
 // @description  Better view for Ant Design (React)
 // @author       Nicholas Hsiang / 山茶树和葡萄树
 // @icon         https://xinlu.ink/favicon.ico
 // @match        https://ant.design/*
 // @grant        none
+
 // ==/UserScript==
 (function () {
   "use strict";
+  // NOTE: 已知问题：
+  // 当离开“组件”页面进入“设计、文档、资源”时，会引发 DOMException 异常，需要刷新页面才会生效
 
   const bodyContainer = document.querySelector("body");
 
   const titleText = "Ant Design of React";
+  // 有的站点能够直接从菜单 root 操作
+  // 有的则不能，因为他们在菜单切换时，是通过 Markdown 动态生态，需要插入到 root 层，不然报错
   const gridSelector = ".aside-container.menu-site";
   const columnSelector = ".ant-menu-item-group";
   const columnTitleSelector = ".ant-menu-item-group-title";
+
   const menuListSelector = ".ant-menu-item-group-list";
   const menuItemSelector = ".ant-menu-item-group-list .ant-menu-item";
   const helpEnable = true;
@@ -27,95 +33,80 @@
 
   const cloneNodeEnable = false; // 保留原 DOM 节点? 有的站点上设置 true 会造成刷新
 
-  let completed = false;
-
   let interval = null;
   let timeout = null;
 
-  function ready() {
-    const originEle = document.querySelector(gridSelector);
+  let created = false;
 
-    if (originEle) {
-      window.clearInterval(interval);
-      init();
-      if (!completed) {
-        initialMenuSiteNavEvent();
-      }
-      // Other
+  // #region 点击 Nav
+
+  /** 导航菜单点击事件 */
+  function handleMenuSiteNav(event) {
+    const eventTarget = event.target;
+    const tagName = eventTarget.tagName.toLowerCase();
+
+    if (tagName === "a") {
+      enterOrLeave(eventTarget.href);
     }
   }
 
-  interval = window.setInterval(ready, 1000);
+  const menuSiteNavHandler = debounce(handleMenuSiteNav, 500);
 
-  // 进入站点时看是否匹配
-  function init(href = window.location.href) {
+  /** 导航菜单绑定事件 */
+  function initialMenuSiteNavEvent() {
+    var menuSite = document.querySelector("#nav");
+    menuSite.addEventListener("click", menuSiteNavHandler);
+  }
+
+  // #endregion 点击 Nav
+
+  // #region 组件页面 24 栅格
+  function resetLayout(type) {
+    const pageSider = document.querySelector(".main-wrapper>.ant-row>.main-menu");
+    const pageContainer = document.querySelector(".main-wrapper>.ant-row>.ant-col+.ant-col");
+
+    if (!pageSider || !pageContainer) {
+      return false;
+    }
+
+    switch (type) {
+      case "in":
+        pageSider.classList.add("hs-hide");
+        pageContainer.classList.remove("ant-col-md-18", "ant-col-lg-18", "ant-col-xl-19", "ant-col-xxl-20");
+        pageContainer.classList.add("ant-col-md-24", "ant-col-lg-24", "ant-col-xl-24", "ant-col-xxl-24");
+        break;
+      default:
+        pageSider.classList.remove("hs-hide");
+        pageContainer.classList.remove("ant-col-md-24", "ant-col-lg-24", "ant-col-xl-24", "ant-col-xxl-24");
+        pageContainer.classList.add("ant-col-md-18", "ant-col-lg-18", "ant-col-xl-19", "ant-col-xxl-20");
+        break;
+    }
+  }
+  // #endregion 组件页面 24 栅格
+
+  // #region 看当前 URL 是不是组件页面
+  function enterOrLeave(href = window.location.href) {
     if (href.includes("components")) {
       console.log("Ant Design Components Dashboard (React) (^4.0.0)");
-      if (completed === false) {
-        completed = true;
+      bodyContainer.classList.add("hs-page__component");
+      resetLayout("in");
 
-        // 刻意搞慢，要等
-        // Dashboard
+      if (created === false) {
+        created = true;
         timeout = window.setTimeout(() => {
           initialDashboard();
         }, 500);
       }
-      bodyContainer.classList.add("hs-page__component");
-      resetLayout("in");
     } else {
       bodyContainer.classList.remove("hs-page__component");
       resetLayout("off");
     }
   }
-
-  // 通过点击进入其它页面，或进入指定页面
-  function handleMenuSiteNavEvent(event) {
-    const eventTarget = event.target;
-    const tagName = eventTarget.tagName.toLowerCase();
-    let href = "";
-
-    if (tagName === "a") {
-      href = eventTarget.href;
-      init(href);
-    }
-  }
-
-  function initialMenuSiteNavEvent() {
-    var menuSite = document.querySelector("#nav");
-    menuSite.addEventListener("click", debounce(handleMenuSiteNavEvent, 500));
-  }
-
-  // 组件页面 24 栅格
-  function resetLayout(type) {
-    const pageSider = document.querySelector(".main-wrapper>.ant-row>.main-menu");
-    const pageContainer = document.querySelector(".main-wrapper>.ant-row>.ant-col+.ant-col");
-
-    switch (type) {
-      case "in":
-        pageSider?.classList.add("hs-hide");
-        pageContainer?.classList.remove("ant-col-md-18", "ant-col-lg-18", "ant-col-xl-19", "ant-col-xxl-20");
-        pageContainer?.classList.add("ant-col-md-24", "ant-col-lg-24", "ant-col-xl-24", "ant-col-xxl-24");
-        break;
-      default:
-        pageSider?.classList.remove("hs-hide");
-        pageContainer?.classList.remove("ant-col-md-24", "ant-col-lg-24", "ant-col-xl-24", "ant-col-xxl-24");
-        pageContainer?.classList.add("ant-col-md-18", "ant-col-lg-18", "ant-col-xl-19", "ant-col-xxl-20");
-        break;
-    }
-  }
-
-  function initialDashboard() {
-    window.clearTimeout(timeout);
-    initialToggle();
-    initialStyle();
-    initialMenu(cloneNodeEnable);
-    initialHelp();
-    handleEvent();
-  }
+  // #endregion 看当前 URL 是不是组件页面
 
   // #region MENU
   /** 生成 Menu */
-  function initialMenu(clone) {
+  function initialMenu() {
     // Wrapper
     const wrapperEle = document.createElement("section");
     wrapperEle.classList.add("hs-dashboard__wrapper", "hs-hide");
@@ -141,22 +132,31 @@
       const removeEle = document.querySelectorAll(removeSelector);
       if (removeEle) {
         removeEle.forEach((element) => {
-          element.remove();
+          // element.remove();
+          element.classList.add("hs-hide");
         });
       }
     }
 
     // 1. 先从页面上获取 DOM
-    // TODO: 不能直接拿菜单列表的根，因为站点本身导航切换时会根据这个根节点再次渲染菜单
-    let menuEle = null;
+    let gridEle = null;
 
-    if (clone) {
-      menuEle = document.querySelector(gridSelector).cloneNode(true);
+    if (cloneNodeEnable) {
+      gridEle = document.querySelector(gridSelector).cloneNode(true);
     } else {
-      menuEle = document.querySelector(gridSelector);
+      gridEle = document.querySelector(gridSelector);
     }
 
-    menuEle.classList.add("hs-dashboard__grid"); // 追加新的样式
+    let menuEle = document.createElement("nav");
+
+    menuEle.setAttribute("class", gridEle.className);
+    menuEle.classList.add("hs-dashboard__grid");
+
+    let menuItemsEle = gridEle.querySelectorAll(columnSelector);
+
+    menuItemsEle.forEach((element) => {
+      menuEle.appendChild(element);
+    });
 
     // Menu → Container
     containerEle.appendChild(menuEle);
@@ -548,4 +548,25 @@
   }
 
   // #endregion
+
+  function initialDashboard() {
+    window.clearTimeout(timeout);
+    initialToggle();
+    initialStyle();
+    initialMenu();
+    initialHelp();
+    handleEvent();
+  }
+
+  function ready() {
+    const originEle = document.querySelector(gridSelector);
+
+    if (originEle) {
+      window.clearInterval(interval);
+      initialMenuSiteNavEvent();
+      enterOrLeave();
+    }
+  }
+
+  interval = window.setInterval(ready, 1000);
 })();
