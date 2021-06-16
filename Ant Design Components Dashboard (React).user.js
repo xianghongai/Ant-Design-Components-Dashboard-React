@@ -1,10 +1,8 @@
 // ==UserScript==
-// @name:zh-CN   Ant Design 组件看板 (^4.0.0)
-// @name         Ant Design Components Dashboard (React) (^4.0.0)
+// @name         Ant Design Components Dashboard (React) (^4.0.0) / Ant Design 组件看板
 // @namespace    https://github.com/xianghongai/Ant-Design-Components-Dashboard-React
-// @version      0.0.4
-// @description:zh-CN  更方便的查看 Ant Design (React) 组件
-// @description  Better view for Ant Design (React)
+// @version      0.0.6
+// @description  Better view for Ant Design (React) / 更方便的查看 Ant Design (React) 组件
 // @author       Nicholas Hsiang / 山茶树和葡萄树
 // @icon         https://xinlu.ink/favicon.ico
 // @match        https://ant.design/*
@@ -142,9 +140,9 @@
     let gridEle = null;
 
     if (cloneNodeEnable) {
-      gridEle = document.querySelector(gridSelector).cloneNode(true); console.log(0)
+      gridEle = document.querySelector(gridSelector).cloneNode(true);
     } else {
-      gridEle = document.querySelector(gridSelector); console.log(1)
+      gridEle = document.querySelector(gridSelector);
     }
 
     let menuEle = document.createElement("nav");
@@ -435,6 +433,8 @@
           .hs-dashboard__column .hs-dashboard__list .ant-menu-item {
             height: 36px;
             line-height: 36px;
+            margin-top: 0;
+            margin-bottom: 0;
           }
           /* #endregion custom */
   `;
