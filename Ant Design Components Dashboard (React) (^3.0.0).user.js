@@ -1,21 +1,24 @@
 // ==UserScript==
-// @name:zh-CN   Ant Design 组件看板 (^3.0.0)
-// @name         Ant Design Components Dashboard (React) (^3.0.0)
+// @name         Ant Design Components Dashboard (React) (^3.0.0) / Ant Design 组件看板
 // @namespace    https://github.com/xianghongai/Ant-Design-Components-Dashboard-React
-// @version      0.0.1
-// @description:zh-CN  更方便的查看 Ant Design (React) 组件
-// @description  Better view for Ant Design (React)
+// @version      0.0.3
+// @description  Better view for Ant Design (React) / 更方便的查看 Ant Design (React) 组件
 // @author       Nicholas Hsiang / 山茶树和葡萄树
 // @icon         https://xinlu.ink/favicon.ico
 // @match        https://3x.ant.design/*
+// @match        https://2x.ant.design/*
 // @grant        none
 // ==/UserScript==
 (function () {
   "use strict";
 
-  const titleText = "Ant Design";
+  let titleText = "Ant Design of React (3.x)";
 
-  const gridSelector = ".aside-container.menu-site .ant-menu-submenu .ant-menu-sub";
+  if (location.href.includes('2x')) {
+    titleText = "Ant Design of React (2.x)";
+  }
+
+  const gridSelector = ".aside-container ul.ant-menu-sub";
   const girdIsList = false; // 如果提取的是一个 Node 数组
 
   const columnSelector = ".ant-menu-item-group";
@@ -194,7 +197,10 @@
       themeSwitchForm = document.querySelector(".hs-theme-switch__form-control");
     }
 
-    bodyContainer.addEventListener("click", (event) => {
+    const toggleMenuBtn = document.querySelector('.hs-dashboard__toggle-menu');
+    const toggleHelpBtn = document.querySelector('.hs-dashboard__toggle-help');
+
+    function handler(event) {
       const targetEle = event.target;
 
       const itemEle = getParents(targetEle, ".hs-dashboard__item");
@@ -237,6 +243,24 @@
         handleHelp();
       } else if (isTheme) {
         handleTheme();
+      }
+    }
+
+    bodyContainer.addEventListener("click", handler);
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Tab' || event.code === 'Tab') {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleMenuBtn?.click();
+      }
+      // else if (event.key === 'Escape' || event.code === 'Escape') {
+      //   toggleMenuBtn.click();
+      // }
+      else if (event.key === 'F1' || event.code === 'F1') {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleHelpBtn?.click();
       }
     });
   }
@@ -834,7 +858,7 @@
         function (s) {
           var matches = (this.document || this.ownerDocument).querySelectorAll(s),
             i = matches.length;
-          while (--i >= 0 && matches.item(i) !== this) {}
+          while (--i >= 0 && matches.item(i) !== this) { }
           return i > -1;
         };
     }
