@@ -18,7 +18,7 @@
 
   const bodyContainer = document.querySelector("body");
 
-  const titleText = "Ant Design of React";
+  const titleText = "Ant Design of React (4.x)";
   // 有的站点能够直接从菜单 root 操作
   // 有的则不能，因为他们在菜单切换时，是通过 Markdown 动态生态，需要插入到 root 层，不然报错
   const gridSelector = ".aside-container.menu-site";
@@ -31,7 +31,7 @@
   const helpSelector = ".api-container";
   const removeSelector = gridSelector + ">li:not(.ant-menu-item-group)";
 
-  const cloneNodeEnable = false; // 保留原 DOM 节点? 有的站点上设置 true 会造成刷新
+  const cloneNodeEnable = true; // 保留原 DOM 节点? 有的站点上设置 true 会造成刷新
 
   let interval = null;
   let timeout = null;
@@ -142,9 +142,9 @@
     let gridEle = null;
 
     if (cloneNodeEnable) {
-      gridEle = document.querySelector(gridSelector).cloneNode(true);
+      gridEle = document.querySelector(gridSelector).cloneNode(true); console.log(0)
     } else {
-      gridEle = document.querySelector(gridSelector);
+      gridEle = document.querySelector(gridSelector); console.log(1)
     }
 
     let menuEle = document.createElement("nav");
@@ -200,7 +200,10 @@
   function handleEvent() {
     const wrapperEle = document.querySelector(".hs-dashboard__wrapper");
 
-    bodyContainer.addEventListener("click", (event) => {
+    const toggleMenuBtn = document.querySelector('.hs-dashboard__toggle-menu');
+    const toggleHelpBtn = document.querySelector('.hs-dashboard__toggle-help');
+
+    function handler(event) {
       const targetEle = event.target;
 
       const isItem = getParents(targetEle, ".hs-dashboard__item") || hasClass(targetEle, "hs-dashboard__item") || (getParents(targetEle, ".hs-dashboard__column") && getParents(targetEle, ".hs-dashboard__list"));
@@ -218,7 +221,26 @@
         clearStyle(wrapperEle);
         handleHelp();
       }
+    }
+
+    bodyContainer.addEventListener("click", handler);
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Tab' || event.code === 'Tab') {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleMenuBtn?.click();
+      }
+      // else if (event.key === 'Escape' || event.code === 'Escape') {
+      //   toggleMenuBtn.click();
+      // }
+      else if (event.key === 'F1' || event.code === 'F1') {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleHelpBtn?.click();
+      }
     });
+
   }
 
   function clearStyle(wrapperEle) {
@@ -497,7 +519,7 @@
         function (s) {
           var matches = (this.document || this.ownerDocument).querySelectorAll(s),
             i = matches.length;
-          while (--i >= 0 && matches.item(i) !== this) {}
+          while (--i >= 0 && matches.item(i) !== this) { }
           return i > -1;
         };
     }
